@@ -5,6 +5,7 @@ import com.langworthy.couchbasedemo.repository.StudentRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 public class StudentService {
@@ -15,8 +16,8 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-    public Student create(Student student) {
-        return null;
+    public Mono<Student> create(Student student) {
+        return studentRepository.save(student);
     }
 
     public Flux<Student> fetchAllStudents() {
