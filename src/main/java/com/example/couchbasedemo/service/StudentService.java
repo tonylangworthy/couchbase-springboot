@@ -1,8 +1,7 @@
-package com.langworthy.couchbasedemo.service;
+package com.example.couchbasedemo.service;
 
-import com.langworthy.couchbasedemo.model.Student;
-import com.langworthy.couchbasedemo.repository.StudentRepository;
-import java.util.List;
+import com.example.couchbasedemo.model.StudentRecord;
+import com.example.couchbasedemo.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -16,11 +15,11 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-    public Mono<Student> create(Student student) {
-        return studentRepository.save(student);
+    public Mono<StudentRecord> create(StudentRecord studentRecord) {
+        return Mono.just(studentRepository.save(studentRecord));
     }
 
-    public Flux<Student> fetchAllStudents() {
+    public Flux<StudentRecord> fetchAllStudents() {
         return studentRepository.findAll();
     }
 }
