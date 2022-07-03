@@ -5,7 +5,7 @@ import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
 import org.springframework.data.couchbase.repository.config.EnableCouchbaseRepositories;
 
 @Configuration
-@EnableCouchbaseRepositories(basePackages={"com.langworthy.couchbasedemo"})
+@EnableCouchbaseRepositories(basePackages = {"com.example.couchbasedemo"})
 public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
 
     @Override
@@ -26,5 +26,10 @@ public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
     @Override
     public String getBucketName() {
         return "student-bucket";
+    }
+
+    @Override
+    protected String getScopeName() {
+        return "art-school-scope";
     }
 }

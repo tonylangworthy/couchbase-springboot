@@ -3,8 +3,8 @@ package com.example.couchbasedemo.service;
 import com.example.couchbasedemo.model.StudentRecord;
 import com.example.couchbasedemo.repository.StudentRecordRepository;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Service
 public class StudentService {
@@ -15,11 +15,11 @@ public class StudentService {
         this.studentRecordRepository = studentRecordRepository;
     }
 
-    public Mono<StudentRecord> create(StudentRecord studentRecord) {
+    public StudentRecord create(StudentRecord studentRecord) {
         return studentRecordRepository.save(studentRecord);
     }
 
-    public Flux<StudentRecord> fetchAllStudents() {
+    public List<StudentRecord> fetchAllStudents() {
         return studentRecordRepository.findAll();
     }
 }

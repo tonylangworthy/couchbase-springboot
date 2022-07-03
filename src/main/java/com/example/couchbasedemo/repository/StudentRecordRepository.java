@@ -1,12 +1,13 @@
 package com.example.couchbasedemo.repository;
 
 import com.example.couchbasedemo.model.StudentRecord;
-import org.springframework.data.couchbase.repository.ReactiveCouchbaseRepository;
-import org.springframework.stereotype.Repository;
-import reactor.core.publisher.Flux;
+import org.springframework.data.couchbase.repository.CouchbaseRepository;
+import org.springframework.data.domain.Sort;
 
-@Repository
-public interface StudentRecordRepository extends ReactiveCouchbaseRepository<StudentRecord, String> {
+import java.util.List;
 
-    Flux<StudentRecord> findAll();
+public interface StudentRecordRepository extends CouchbaseRepository<StudentRecord, String> {
+
+    @Override
+    List<StudentRecord> findAll(Sort sort);
 }
