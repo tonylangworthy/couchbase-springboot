@@ -1,4 +1,4 @@
-package com.langworthy.couchbasedemo;
+package com.example.couchbasedemo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

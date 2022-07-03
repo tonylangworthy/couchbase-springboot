@@ -1,4 +1,4 @@
-package com.langworthy.couchbasedemo.model;
+package com.example.couchbasedemo.model;
 
 import java.util.Objects;
 import org.springframework.data.annotation.Id;
@@ -6,7 +6,7 @@ import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.Field;
 
 @Document
-public class Course {
+public class CourseRecord {
 
     @Id
     private String id;
@@ -20,10 +20,10 @@ public class Course {
     @Field
     private String creditPoints;
 
-    public Course() {
+    public CourseRecord() {
     }
 
-    public Course(String courseName, String faculty, String creditPoints) {
+    public CourseRecord(String courseName, String faculty, String creditPoints) {
         this.courseName = courseName;
         this.faculty = faculty;
         this.creditPoints = creditPoints;
@@ -69,8 +69,8 @@ public class Course {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Course course = (Course) o;
-        return Objects.equals(id, course.id) && Objects.equals(courseName, course.courseName) && Objects.equals(faculty, course.faculty) && Objects.equals(creditPoints, course.creditPoints);
+        CourseRecord courseRecord = (CourseRecord) o;
+        return Objects.equals(id, courseRecord.id) && Objects.equals(courseName, courseRecord.courseName) && Objects.equals(faculty, courseRecord.faculty) && Objects.equals(creditPoints, courseRecord.creditPoints);
     }
 
     @Override
