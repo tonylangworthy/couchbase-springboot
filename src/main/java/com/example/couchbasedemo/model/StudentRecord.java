@@ -11,10 +11,10 @@ import java.util.List;
 @Getter
 @ToString
 @Document
-@Collection("student-record-collection")
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@Collection("student-record-collection")
 public class StudentRecord {
 
     @Id
