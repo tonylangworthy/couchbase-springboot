@@ -2,6 +2,8 @@ package com.example.couchbasedemo.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class StudentRecordDto {
 
@@ -11,5 +13,5 @@ public class StudentRecordDto {
 
     private String dateOfBirth;
 
-//    private Map<String, EnrollmentDto> enrollments;
+    private List<EnrollmentDto> enrollments;
 }
