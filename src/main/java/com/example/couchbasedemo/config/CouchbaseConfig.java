@@ -10,12 +10,12 @@ public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
 
     @Override
     public String getConnectionString() {
-        return "couchbase://127.0.0.1";
+        return "couchbase://localhost";
     }
 
     @Override
     public String getUserName() {
-        return "admin";
+        return "Administrator";
     }
 
     @Override
