@@ -34,7 +34,7 @@ Again, the body should contain a JSON document as shown in the screenshot.
 
 [Baeldung Spring Data Couchbase Tutorial](https://www.baeldung.com/spring-data-couchbase)
 
-[Couchbase Tutorial (Official Documentation)](https://docs.couchbase.com/server/current/tutorials/couchbase-tutorial-studentRecord-records.html)
+[Couchbase Tutorial (Official Documentation)](https://docs.couchbase.com/server/current/tutorials/couchbase-tutorial-student-records.html)
 
 [Spring Boot Couchbase Project (Official Documentation)](https://docs.spring.io/spring-data/couchbase/docs/current/reference/html/)
 
