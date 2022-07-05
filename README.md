@@ -3,7 +3,7 @@
 ---
 
 This is a simple Java/Spring Boot application that demonstrates using Couchbase 
-as a database in a Spring Boot application. 
+as a database in a Spring Boot application using **Spring Data Couchbase**. 
 
 **NOTE:** *This is a POC, and not meant to be production 
 quality.*
