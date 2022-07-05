@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@Qualifier("CourseService")
 @RequiredArgsConstructor
+@Qualifier("CourseService")
 public class CourseService {
 
     private final CourseRecordRepository courseRecordRepository;
