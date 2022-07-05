@@ -1,23 +1,21 @@
-package com.langworthy.couchbasedemo.config;
+package com.example.couchbasedemo.config;
 
-import java.util.Arrays;
-import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
 import org.springframework.data.couchbase.repository.config.EnableCouchbaseRepositories;
 
 @Configuration
-@EnableCouchbaseRepositories(basePackages={"com.langworthy.couchbasedemo"})
-public class ExampleCouchbaseConfig extends AbstractCouchbaseConfiguration {
+@EnableCouchbaseRepositories(basePackages = {"com.example.couchbasedemo"})
+public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
 
     @Override
     public String getConnectionString() {
-        return "localhost";
+        return "couchbase://127.0.0.1";
     }
 
     @Override
     public String getUserName() {
-        return "Administrator";
+        return "admin";
     }
 
     @Override
@@ -28,5 +26,10 @@ public class ExampleCouchbaseConfig extends AbstractCouchbaseConfiguration {
     @Override
     public String getBucketName() {
         return "student-bucket";
+    }
+
+    @Override
+    protected String getScopeName() {
+        return "art-school-scope";
     }
 }

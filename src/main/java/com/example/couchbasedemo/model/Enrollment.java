@@ -1,4 +1,4 @@
-package com.langworthy.couchbasedemo.model;
+package com.example.couchbasedemo.model;
 
 import java.util.Objects;
 import org.springframework.data.annotation.Id;
