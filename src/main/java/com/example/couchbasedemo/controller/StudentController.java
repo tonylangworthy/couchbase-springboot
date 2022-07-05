@@ -1,8 +1,11 @@
 package com.example.couchbasedemo.controller;
 
+import com.example.couchbasedemo.dto.EnrollmentDto;
 import com.example.couchbasedemo.dto.StudentRecordDto;
+import com.example.couchbasedemo.model.Enrollment;
 import com.example.couchbasedemo.model.StudentRecord;
 import com.example.couchbasedemo.service.StudentService;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,11 +32,16 @@ public class StudentController {
     public void createStudent(@RequestBody StudentRecordDto studentRecord) {
         log.info("Student Record: {}", studentRecord.toString());
 
-//        Map<String, EnrollmentDto> enrollmentDtoMap = studentRecord.getEnrollments();
-//        enrollmentDtoMap.forEach((id, enrollment) -> log.info("Id: {} -> Enrollment: {}", id, enrollment));
+        List<Enrollment> enrollmentList = new ArrayList<>();
+
+        List<EnrollmentDto> enrollmentDtoMap = studentRecord.getEnrollments();
+        enrollmentDtoMap.forEach(enrollment -> {
+            enrollmentList.add(new Enrollment(
+                    enrollment.getCourseId(), enrollment.getDateEnrolled(), enrollment.getDateCompleted()));
+        });
 
         StudentRecord newStudentRecord = new StudentRecord(
-                studentRecord.getId(), studentRecord.getName(), studentRecord.getDateOfBirth(), new ArrayList<>());
+                studentRecord.getId(), studentRecord.getName(), studentRecord.getDateOfBirth(), enrollmentList);
 
         studentService.create(newStudentRecord);
     }

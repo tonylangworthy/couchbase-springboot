@@ -8,4 +8,6 @@ public class EnrollmentDto {
     private String courseId;
 
     private String dateEnrolled;
+
+    private String dateCompleted;
 }
