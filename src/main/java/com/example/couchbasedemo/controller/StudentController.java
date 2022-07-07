@@ -2,13 +2,17 @@ package com.example.couchbasedemo.controller;
 
 import com.example.couchbasedemo.dto.EnrollmentDto;
 import com.example.couchbasedemo.dto.StudentRecordDto;
+import com.example.couchbasedemo.exception.StudentNotFoundException;
 import com.example.couchbasedemo.model.Enrollment;
 import com.example.couchbasedemo.model.StudentRecord;
 import com.example.couchbasedemo.service.StudentService;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +31,28 @@ public class StudentController {
     public List<StudentRecord> listAllStudents() {
         return studentService.fetchAllStudents();
     }
+
+    @GetMapping("/students/{id}")
+    public ResponseEntity getStudentById(@PathVariable String id) {
+        log.info("Fetching student with id: {}", id);
+
+        StudentRecord studentRecord;
+
+        try {
+             studentRecord = studentService.findByStudentId(id);
+        } catch (StudentNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<EnrollmentDto> enrollmentDtos = studentRecord.getEnrollments().stream().map(enrollment -> {
+            return new EnrollmentDto(
+                    enrollment.getId(), enrollment.getDateEnrolled(), enrollment.getDateCompleted());
+        }).collect(Collectors.toList());
+
+        StudentRecordDto studentRecordDto = new StudentRecordDto(studentRecord.getId(), studentRecord.getName(),
+                studentRecord.getDateOfBirth(), enrollmentDtos);
+        return ResponseEntity.ok(studentRecordDto);
+   }
 
     @PostMapping("/students")
     public void createStudent(@RequestBody StudentRecordDto studentRecord) {
