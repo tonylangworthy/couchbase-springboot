@@ -5,6 +5,7 @@ import com.example.couchbasedemo.dto.StudentRecordDto;
 import com.example.couchbasedemo.exception.StudentNotFoundException;
 import com.example.couchbasedemo.model.Enrollment;
 import com.example.couchbasedemo.model.StudentRecord;
+import com.example.couchbasedemo.service.CourseService;
 import com.example.couchbasedemo.service.StudentService;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,7 +48,7 @@ public class StudentController {
 
         List<EnrollmentDto> enrollmentDtos = studentRecord.getEnrollments().stream().map(enrollment ->
             new EnrollmentDto(
-                    enrollment.getId(), enrollment.getDateEnrolled(), enrollment.getDateCompleted())
+                    enrollment.getCourseId(), enrollment.getDateEnrolled(), enrollment.getDateCompleted())
         ).collect(Collectors.toList());
 
         StudentRecordDto studentRecordDto = new StudentRecordDto(studentRecord.getId(), studentRecord.getName(),
@@ -55,20 +57,31 @@ public class StudentController {
    }
 
     @PostMapping("/students")
-    public void createStudent(@RequestBody StudentRecordDto studentRecord) {
-        log.info("Student Record: {}", studentRecord.toString());
+    public void createStudent(@RequestBody StudentRecordDto studentRecordDto) {
+        log.info("Student Record: {}", studentRecordDto.toString());
 
-        List<Enrollment> enrollmentList = new ArrayList<>();
-
-        List<EnrollmentDto> enrollmentDtoMap = studentRecord.getEnrollments();
-        enrollmentDtoMap.forEach(enrollment -> {
-            enrollmentList.add(new Enrollment(
-                    enrollment.getCourseId(), enrollment.getDateEnrolled(), enrollment.getDateCompleted()));
-        });
+        List<Enrollment> enrollments = studentRecordDto.getEnrollments().stream().map(enrollment ->
+            new Enrollment(
+                    enrollment.getCourseId(), enrollment.getDateEnrolled(), enrollment.getDateCompleted())
+        ).collect(Collectors.toList());
 
         StudentRecord newStudentRecord = new StudentRecord(
-                studentRecord.getId(), studentRecord.getName(), studentRecord.getDateOfBirth(), enrollmentList);
+                studentRecordDto.getId(), studentRecordDto.getName(), studentRecordDto.getDateOfBirth(), enrollments);
 
         studentService.create(newStudentRecord);
+    }
+
+    @PutMapping("/students")
+    public void updateStudent(@RequestBody StudentRecordDto studentRecordDto) {
+        log.info("Updating Student Record: {}", studentRecordDto);
+
+        List<Enrollment> enrollmentList = studentRecordDto.getEnrollments().stream().map(enrollment ->
+            new Enrollment(enrollment.getCourseId(), enrollment.getDateEnrolled(), enrollment.getDateCompleted())
+        ).collect(Collectors.toList());
+
+        StudentRecord studentRecord = new StudentRecord(studentRecordDto.getId(), studentRecordDto.getName(),
+                studentRecordDto.getDateOfBirth(), enrollmentList);
+
+        studentService.update(studentRecord);
     }
 }

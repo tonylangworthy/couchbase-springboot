@@ -21,6 +21,10 @@ public class StudentService {
         return studentRecordRepository.save(studentRecord);
     }
 
+    public StudentRecord update(StudentRecord studentRecord) {
+        return studentRecordRepository.save(studentRecord);
+    }
+
     public List<StudentRecord> fetchAllStudents() {
         return studentRecordRepository.findAll();
     }
