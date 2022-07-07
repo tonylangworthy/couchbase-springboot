@@ -33,7 +33,7 @@ public class StudentController {
     }
 
     @GetMapping("/students/{id}")
-    public ResponseEntity getStudentById(@PathVariable String id) {
+    public ResponseEntity<StudentRecordDto> getStudentById(@PathVariable String id) {
         log.info("Fetching student with id: {}", id);
 
         StudentRecord studentRecord;
@@ -44,10 +44,10 @@ public class StudentController {
             return ResponseEntity.notFound().build();
         }
 
-        List<EnrollmentDto> enrollmentDtos = studentRecord.getEnrollments().stream().map(enrollment -> {
-            return new EnrollmentDto(
-                    enrollment.getId(), enrollment.getDateEnrolled(), enrollment.getDateCompleted());
-        }).collect(Collectors.toList());
+        List<EnrollmentDto> enrollmentDtos = studentRecord.getEnrollments().stream().map(enrollment ->
+            new EnrollmentDto(
+                    enrollment.getId(), enrollment.getDateEnrolled(), enrollment.getDateCompleted())
+        ).collect(Collectors.toList());
 
         StudentRecordDto studentRecordDto = new StudentRecordDto(studentRecord.getId(), studentRecord.getName(),
                 studentRecord.getDateOfBirth(), enrollmentDtos);
