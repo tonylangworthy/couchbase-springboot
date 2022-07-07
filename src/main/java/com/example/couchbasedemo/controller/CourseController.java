@@ -1,11 +1,14 @@
 package com.example.couchbasedemo.controller;
 
 import com.example.couchbasedemo.dto.CourseRecordDto;
+import com.example.couchbasedemo.exception.CourseNotFoundException;
 import com.example.couchbasedemo.model.CourseRecord;
 import com.example.couchbasedemo.service.CourseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +34,25 @@ public class CourseController {
                     course.getId(), course.getCourseName(), course.getFaculty(), course.getCreditPoints());
         }).collect(Collectors.toList());
     }
+
+    @GetMapping("/courses/{id}")
+    public ResponseEntity<CourseRecordDto> getCourseById(@PathVariable String id) {
+        log.info("Fetching student with id: {}", id);
+
+        CourseRecord courseRecord;
+
+        try {
+            courseRecord = courseService.findByCourseId(id);
+
+        } catch (CourseNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+
+        CourseRecordDto courseRecordDto = new CourseRecordDto(courseRecord.getId(), courseRecord.getCourseName(),
+                courseRecord.getFaculty(), courseRecord.getCreditPoints());
+        return ResponseEntity.ok(courseRecordDto);
+    }
+
 
     @PostMapping("/courses")
     public void createCourse(@RequestBody CourseRecordDto courseRecordDto) {
