@@ -1,7 +1,9 @@
 package com.example.couchbasedemo.service;
 
+import com.example.couchbasedemo.exception.CourseNotFoundException;
 import com.example.couchbasedemo.model.CourseRecord;
 import com.example.couchbasedemo.repository.CourseRecordRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -21,5 +23,10 @@ public class CourseService {
 
     public List<CourseRecord> fetchAllCourses() {
         return courseRecordRepository.findAll();
+    }
+
+    public CourseRecord findByCourseId(String courseId) {
+        Optional<CourseRecord> optionalCourseRecord = courseRecordRepository.findById(courseId);
+        return optionalCourseRecord.orElseThrow(CourseNotFoundException::new);
     }
 }
