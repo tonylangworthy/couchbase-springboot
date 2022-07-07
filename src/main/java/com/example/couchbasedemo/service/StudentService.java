@@ -1,7 +1,9 @@
 package com.example.couchbasedemo.service;
 
+import com.example.couchbasedemo.exception.StudentNotFoundException;
 import com.example.couchbasedemo.model.StudentRecord;
 import com.example.couchbasedemo.repository.StudentRecordRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -21,5 +23,10 @@ public class StudentService {
 
     public List<StudentRecord> fetchAllStudents() {
         return studentRecordRepository.findAll();
+    }
+
+    public StudentRecord findByStudentId(String studentId) {
+        Optional<StudentRecord> optionalStudentRecord = studentRecordRepository.findById(studentId);
+        return optionalStudentRecord.orElseThrow(StudentNotFoundException::new);
     }
 }
