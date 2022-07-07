@@ -15,7 +15,7 @@ public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
 
     @Override
     public String getUserName() {
-        return "Administrator";
+        return "root";
     }
 
     @Override
