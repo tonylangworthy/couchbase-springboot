@@ -8,6 +8,22 @@ as a database in a Spring Boot application using **Spring Data Couchbase**.
 **NOTE:** *This is a POC, and not meant to be production 
 quality.*
 
+##The "real life" example:
+
+Some place, maybe a community college, or maybe a small yoga school, offers courses.  Of course students would enroll.  
+
+Here is a example of how relationships might look in a relational database.
+
+![Image](screenshots/relational-model.png "Relational Model")  
+
+
+Here is how they look with the Couchbase NoSQL database.
+
+
+![Image](screenshots/document-model.png "Document Model")  
+
+
+
 ### REST API Endpoints
 * GET `/students` - Returns all students
 * POST `/students` - Stores a student
