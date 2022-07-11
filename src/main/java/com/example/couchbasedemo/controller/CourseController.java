@@ -26,30 +26,23 @@ public class CourseController {
 
     @GetMapping("/courses")
     public List<CourseRecordDto> listAllCourses() {
-        List<CourseRecord> courseRecordList = courseService.fetchAllCourses();
+        return courseService.fetchAllCourses();
 
-        return courseRecordList.stream().map(course -> {
-            log.info("Course Name: {}", course.getCourseName());
-            return new CourseRecordDto(
-                    course.getId(), course.getCourseName(), course.getFaculty(), course.getCreditPoints());
-        }).collect(Collectors.toList());
     }
 
     @GetMapping("/courses/{id}")
     public ResponseEntity<CourseRecordDto> getCourseById(@PathVariable String id) {
         log.info("Fetching student with id: {}", id);
 
-        CourseRecord courseRecord;
+        CourseRecordDto courseRecordDto;
 
         try {
-            courseRecord = courseService.findByCourseId(id);
+            courseRecordDto = courseService.findByCourseId(id);
 
         } catch (CourseNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
 
-        CourseRecordDto courseRecordDto = new CourseRecordDto(courseRecord.getId(), courseRecord.getCourseName(),
-                courseRecord.getFaculty(), courseRecord.getCreditPoints());
         return ResponseEntity.ok(courseRecordDto);
     }
 
@@ -58,10 +51,6 @@ public class CourseController {
     public void createCourse(@RequestBody CourseRecordDto courseRecordDto) {
         log.info("Course submitted: {}", courseRecordDto.toString());
 
-        CourseRecord newCourseRecord = new CourseRecord(
-                courseRecordDto.getId(), courseRecordDto.getCourseName(), courseRecordDto.getFaculty(),
-                courseRecordDto.getCreditPoints());
-
-        courseService.create(newCourseRecord);
+        courseService.create(courseRecordDto);
     }
 }
