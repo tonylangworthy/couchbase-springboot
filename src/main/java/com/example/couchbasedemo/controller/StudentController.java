@@ -30,7 +30,7 @@ public class StudentController {
     private final StudentService studentService;
 
     @GetMapping("/students")
-    public List<StudentRecord> listAllStudents() {
+    public List<StudentRecordDto> listAllStudents() {
         return studentService.fetchAllStudents();
     }
 
@@ -38,21 +38,14 @@ public class StudentController {
     public ResponseEntity<StudentRecordDto> getStudentById(@PathVariable String id) {
         log.info("Fetching student with id: {}", id);
 
-        StudentRecord studentRecord;
+        StudentRecordDto studentRecordDto;
 
         try {
-             studentRecord = studentService.findByStudentId(id);
+             studentRecordDto = studentService.findByStudentId(id);
         } catch (StudentNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
 
-        List<EnrollmentDto> enrollmentDtos = studentRecord.getEnrollments().stream().map(enrollment ->
-            new EnrollmentDto(
-                    enrollment.getCourseId(), enrollment.getDateEnrolled(), enrollment.getDateCompleted())
-        ).collect(Collectors.toList());
-
-        StudentRecordDto studentRecordDto = new StudentRecordDto(studentRecord.getId(), studentRecord.getName(),
-                studentRecord.getDateOfBirth(), enrollmentDtos);
         return ResponseEntity.ok(studentRecordDto);
    }
 
@@ -60,28 +53,13 @@ public class StudentController {
     public void createStudent(@RequestBody StudentRecordDto studentRecordDto) {
         log.info("Student Record: {}", studentRecordDto.toString());
 
-        List<Enrollment> enrollments = studentRecordDto.getEnrollments().stream().map(enrollment ->
-            new Enrollment(
-                    enrollment.getCourseId(), enrollment.getDateEnrolled(), enrollment.getDateCompleted())
-        ).collect(Collectors.toList());
-
-        StudentRecord newStudentRecord = new StudentRecord(
-                studentRecordDto.getId(), studentRecordDto.getName(), studentRecordDto.getDateOfBirth(), enrollments);
-
-        studentService.create(newStudentRecord);
+        studentService.create(studentRecordDto);
     }
 
     @PutMapping("/students")
     public void updateStudent(@RequestBody StudentRecordDto studentRecordDto) {
         log.info("Updating Student Record: {}", studentRecordDto);
 
-        List<Enrollment> enrollmentList = studentRecordDto.getEnrollments().stream().map(enrollment ->
-            new Enrollment(enrollment.getCourseId(), enrollment.getDateEnrolled(), enrollment.getDateCompleted())
-        ).collect(Collectors.toList());
-
-        StudentRecord studentRecord = new StudentRecord(studentRecordDto.getId(), studentRecordDto.getName(),
-                studentRecordDto.getDateOfBirth(), enrollmentList);
-
-        studentService.update(studentRecord);
+        studentService.update(studentRecordDto);
     }
 }
