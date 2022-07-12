@@ -13,5 +13,5 @@ public class CourseRecordDto {
 
     private String faculty;
 
-    private String creditPoints;
+    private Integer creditPoints;
 }
