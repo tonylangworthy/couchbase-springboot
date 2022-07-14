@@ -1,19 +1,55 @@
 version: "3"
 services:
-  couchbase-db:
-    image: couchbase/server:enterprise-7.1.0
-    container_name: couchbase_db_1
+  kafka-connect:
+    image: confluentinc/cp-kafka-connect-base:7.2.0
+    container_name: kafka-connect
+    # depends_on:
+    #   - broker
+    #   - schema-registry
     ports:
-      - '8091-8094:8091-8094'
-      - '11210:11210'
-    networks:
-      - couchbase-network
+      - 8083:8083
+    # networks:
+    #   - shared_services_network
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: "kafka-1:29092"
+      CONNECT_REST_PORT: 8083
+      CONNECT_GROUP_ID: kafka-connect
+      CONNECT_CONFIG_STORAGE_TOPIC: _connect-configs
+      CONNECT_OFFSET_STORAGE_TOPIC: _connect-offsets
+      CONNECT_STATUS_STORAGE_TOPIC: _connect-status
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
+      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: 'localhost:8081'
+      CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"
+      CONNECT_LOG4J_APPENDER_STDOUT_LAYOUT_CONVERSIONPATTERN: "[%d] %p %X{connector.context}%m (%c:%L)%n"
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: "1"
+      #  ---------------
+      CONNECT_PLUGIN_PATH: /usr/share/java,/usr/share/confluent-hub-components,/data/connect-jars
+    # If you want to use the Confluent Hub installer to d/l component, but make them available
+    # when running this offline, spin up the stack once and then run :
+    #   docker cp kafka-connect:/usr/share/confluent-hub-components ./data/connect-jars
     volumes:
-      - couchbasedata:/opt/couchbase/var
+      - $PWD/data:/data
+    # In the command section, $ are replaced with $$ to avoid the error 'Invalid interpolation format for "command" option'
+    command:
+      - bash
+      - -c
+      - |
+        echo "Installing Connector"
+        confluent-hub install --no-prompt couchbase/kafka-connect-couchbase:4.1.7
+
+        #
+        echo "Launching Kafka Connect worker"
+        /etc/confluent/docker/run &
+        #
+        sleep infinity
+
 
 networks:
-  couchbase-network:
-    driver: bridge
+  default:
+    name: tango-client-local-docker-management_shared_services_network
 
 volumes:
   couchbasedata:
