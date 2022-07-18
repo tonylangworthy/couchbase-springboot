@@ -1,6 +1,10 @@
 package com.example.couchbasedemo.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.Field;
@@ -25,5 +29,5 @@ public class CourseRecord {
     private String faculty;
 
     @Field
-    private String creditPoints;
+    private Integer creditPoints;
 }
